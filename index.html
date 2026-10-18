@@ -144,7 +144,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   <section>
     <div class="sec-head">
       <h2>بحوث المنطقة حسب نوع المخالفة</h2>
-      <p>كل بحث يجمع مدن القصيم مع كلمات المخالفة، ويفتح مباشرة على تبويب «الأحدث» في X. افتحه من الزر وليس بلصقه في صفحة الترند. إذا ظهرت «لا توجد نتائج» فمعناها أنه لا منشورات مطابقة في المدة المختارة؛ جرّب «آخر شهر» أو البحث التجريبي للتأكد أن الروابط تعمل.</p>
+      <p>كل بحث يشترط ذكر مدينة من مدن القصيم مع مبنى تراثي وكلمة مخالفة، وبطاقة «تغريدات من داخل منطقة القصيم» تعرض فقط ما نُشر من موقع داخل المنطقة. وكل بحث يفتح مباشرة على تبويب «الأحدث» في X. افتحه من الزر وليس بلصقه في صفحة الترند. إذا ظهرت «لا توجد نتائج» فمعناها أنه لا منشورات مطابقة في المدة المختارة؛ جرّب «آخر شهر» أو البحث التجريبي للتأكد أن الروابط تعمل.</p>
     </div>
     <div class="grid" id="xGrid"></div>
   </section>
@@ -194,8 +194,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
 <script>
 (() => {
-  const R = '(القصيم OR بريدة OR عنيزة OR "محافظة الرس" OR البكيرية)';
-  const EX = '-مصر -المصرية -القاهرة -العراق -سوريا -المغرب -اليمن';
+  const R = '(القصيم OR بريدة OR عنيزة OR "محافظة الرس" OR البكيرية OR "رياض الخبراء")';
   const X_SEARCHES = [
     { id: 'demo', title: 'هدم وإزالة', hot: true,
       q: '(هدم OR إزالة OR شيول) ("بيت طين" OR "بيوت الطين" OR "مبنى تراثي" OR "بيت تراثي") ' + R },
@@ -209,6 +208,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
       q: '(مخالفة OR بلاغ OR تعديات) ("بيت طين" OR "بيوت الطين" OR "مبنى تراثي" OR "البلدة القديمة") ' + R },
     { id: 'media', title: 'صور ومقاطع من البلدات القديمة', hot: false,
       q: '("بيت طين" OR "بيوت الطين" OR "البلدة القديمة") ' + R + ' filter:media' },
+    { id: 'geo', title: 'تغريدات من داخل منطقة القصيم', hot: false,
+      q: '("بيت طين" OR "بيوت الطين" OR "مبنى تراثي" OR "البلدة القديمة" OR هدم OR ترميم) geocode:26.20,43.60,180km' },
     { id: 'test', title: 'بحث تجريبي بسيط', hot: false,
       q: '"بيوت الطين" القصيم' }
   ];
@@ -243,7 +244,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   if (done.date !== today) done = { date: today, ids: [] };
 
   const sinceDate = () => { const d = new Date(Date.now() - days * 86400000); return d.toISOString().slice(0, 10); };
-  const xUrl = q => 'https://x.com/search?q=' + encodeURIComponent(q + ' ' + EX + ' since:' + sinceDate()) + '&f=live';
+  const xUrl = q => 'https://x.com/search?q=' + encodeURIComponent(q + ' since:' + sinceDate()) + '&f=live';
   const gTbs = () => ({ 1: 'qdr:d', 3: 'qdr:d3', 7: 'qdr:w', 30: 'qdr:m' }[days]);
   const gUrl = q => 'https://www.google.com/search?q=' + encodeURIComponent(q + ' السعودية') + '&tbs=' + gTbs() + ',ctr:countrySA&cr=countrySA&gl=sa&hl=ar';
 
@@ -261,7 +262,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
       '</div>';
     el.querySelector('h3').textContent = s.title;
     el.querySelector('.q').textContent = s.q;
-    el.querySelector('.copy').onclick = () => copy(kind === 'x' ? s.q + ' ' + EX + ' since:' + sinceDate() : s.q + ' السعودية');
+    el.querySelector('.copy').onclick = () => copy(kind === 'x' ? s.q + ' since:' + sinceDate() : s.q + ' السعودية');
     const cb = el.querySelector('input');
     cb.onchange = () => toggle(s.id, cb.checked);
     el.querySelector('.open').addEventListener('click', () => { if (!cb.checked) { cb.checked = true; toggle(s.id, true); } });
