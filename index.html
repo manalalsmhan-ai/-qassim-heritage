@@ -160,7 +160,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   <section>
     <div class="sec-head">
       <h2>الأخبار والمواقع الإلكترونية</h2>
-      <p>بحث جوجل مقيّد بالمدة نفسها، لالتقاط ما تنشره الصحف المحلية وحسابات الأخبار.</p>
+      <p>بحث جوجل مقيّد بالمدة نفسها وبالمواقع السعودية، لالتقاط ما تنشره الصحف المحلية وحسابات الأخبار.</p>
     </div>
     <div class="grid" id="gGrid"></div>
   </section>
@@ -194,7 +194,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 
 <script>
 (() => {
-  const R = '(القصيم OR بريدة OR عنيزة OR الرس OR البكيرية OR المذنب)';
+  const R = '(القصيم OR بريدة OR عنيزة OR "محافظة الرس" OR البكيرية)';
+  const EX = '-مصر -العراق -سوريا -المغرب -اليمن';
   const X_SEARCHES = [
     { id: 'demo', title: 'هدم وإزالة', hot: true,
       q: '(هدم OR إزالة OR شيول) ("بيت طين" OR "بيوت الطين" OR تراثي) ' + R },
@@ -242,9 +243,9 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
   if (done.date !== today) done = { date: today, ids: [] };
 
   const sinceDate = () => { const d = new Date(Date.now() - days * 86400000); return d.toISOString().slice(0, 10); };
-  const xUrl = q => 'https://x.com/search?q=' + encodeURIComponent(q + ' since:' + sinceDate()) + '&f=live';
+  const xUrl = q => 'https://x.com/search?q=' + encodeURIComponent(q + ' ' + EX + ' since:' + sinceDate()) + '&f=live';
   const gTbs = () => ({ 1: 'qdr:d', 3: 'qdr:d3', 7: 'qdr:w', 30: 'qdr:m' }[days]);
-  const gUrl = q => 'https://www.google.com/search?q=' + encodeURIComponent(q) + '&tbs=' + gTbs();
+  const gUrl = q => 'https://www.google.com/search?q=' + encodeURIComponent(q + ' السعودية') + '&tbs=' + gTbs() + ',ctr:countrySA&cr=countrySA&gl=sa&hl=ar';
 
   function card(s, kind) {
     const el = document.createElement('article');
@@ -260,7 +261,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
       '</div>';
     el.querySelector('h3').textContent = s.title;
     el.querySelector('.q').textContent = s.q;
-    el.querySelector('.copy').onclick = () => copy(kind === 'x' ? s.q + ' since:' + sinceDate() : s.q);
+    el.querySelector('.copy').onclick = () => copy(kind === 'x' ? s.q + ' ' + EX + ' since:' + sinceDate() : s.q + ' السعودية');
     const cb = el.querySelector('input');
     cb.onchange = () => toggle(s.id, cb.checked);
     el.querySelector('.open').addEventListener('click', () => { if (!cb.checked) { cb.checked = true; toggle(s.id, true); } });
