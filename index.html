@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>رصد تراث القصيم العمراني</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap">
+<style>
+/* Layout: field-desk sheet — a short brief, a range switch, then search cards grouped by method (region / site / violation / news), each with open + copy, and a done-today tick. */
+:root {
+  --bg: #F3F1EC;          /* limestone */
+  --surface: #FFFFFF;
+  --ink: #2A2420;
+  --muted: #6E6259;
+  --line: #E2DCD2;
+  --adobe: #985A33;       /* Najdi mud-brick */
+  --adobe-soft: #F3E6DB;
+  --palm: #3C5A47;        /* palm frond */
+  --palm-soft: #E3ECE5;
+  --alert: #B3261E;
+  --alert-soft: #F8E3E1;
+  --display: "Reem Kufi", "IBM Plex Sans Arabic", Tahoma, sans-serif;
+  --body: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1B1815; --surface: #24201C; --ink: #F1EBE4; --muted: #B3A79C; --line: #3A332D;
+    --adobe: #D69469; --adobe-soft: #3A2A20; --palm: #8DB59A; --palm-soft: #22302A;
+    --alert: #F08A80; --alert-soft: #3B2220; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1B1815; --surface: #24201C; --ink: #F1EBE4; --muted: #B3A79C; --line: #3A332D;
+  --adobe: #D69469; --adobe-soft: #3A2A20; --palm: #8DB59A; --palm-soft: #22302A;
+  --alert: #F08A80; --alert-soft: #3B2220; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font: 400 15px/1.7 var(--body);
+  direction: rtl; margin: 0;
+}
+.wrap {
+  max-width: 1080px; margin: 0 auto;
+  padding-block: 32px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 40px;
+}
+h1, h2 { font-family: var(--display); font-weight: 700; margin: 0; text-wrap: balance; line-height: 1.3; }
+h1 { font-size: clamp(28px, 4.4vw, 42px); }
+h2 { font-size: 22px; }
+p { margin: 0; }
+.eyebrow { color: var(--adobe); font-weight: 700; font-size: 13px; letter-spacing: .02em; }
+.lede { color: var(--muted); max-width: 62ch; }
+header { display: grid; gap: 10px; }
+
+/* Najdi crenellation motif under the header */
+.tooth { height: 12px; background:
+  linear-gradient(135deg, transparent 50%, var(--adobe) 50%) 0 0 / 12px 12px repeat-x,
+  linear-gradient(225deg, transparent 50%, var(--adobe) 50%) 0 0 / 12px 12px repeat-x;
+  opacity: .55; max-width: 240px; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; gap: 2px; background: var(--bg); }
+.seg button { appearance: none; border: 0; background: transparent; color: var(--muted); font: 500 14px var(--body);
+  padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--palm); color: var(--surface); }
+.progress { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+.meter { width: 140px; height: 8px; background: var(--line); border-radius: 999px; overflow: hidden; }
+.meter i { display: block; height: 100%; width: 0; background: var(--palm); transition: width .3s; }
+.linkbtn { appearance: none; border: 0; background: none; color: var(--adobe); font: 500 13px var(--body); cursor: pointer; padding: 4px; }
+
+section { display: grid; gap: 16px; }
+.sec-head { display: grid; gap: 4px; }
+.sec-head p { color: var(--muted); font-size: 14px; max-width: 70ch; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 10px; min-width: 0; align-content: start; }
+.card.done { border-color: var(--palm); background: linear-gradient(var(--palm-soft), var(--palm-soft)) padding-box; }
+.card-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.card h3 { margin: 0; font-size: 16px; font-weight: 700; }
+.tag { font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 999px; background: var(--adobe-soft); color: var(--adobe); white-space: nowrap; }
+.tag.hot { background: var(--alert-soft); color: var(--alert); }
+.q { direction: rtl; font: 400 13px/1.6 var(--body); color: var(--muted); background: var(--bg); border-radius: 8px; padding: 8px 10px; overflow-wrap: anywhere; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { display: inline-flex; align-items: center; gap: 6px; font: 500 14px var(--body); border-radius: 999px; padding: 6px 14px; cursor: pointer; text-decoration: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.btn.primary { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.btn svg { width: 14px; height: 14px; fill: currentColor; }
+.tick { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); cursor: pointer; user-select: none; }
+.tick input { width: 16px; height: 16px; accent-color: var(--palm); }
+
+.sites { display: flex; flex-wrap: wrap; gap: 8px; }
+.site { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 999px; padding: 6px 8px 6px 14px; font-size: 14px; }
+.site small { color: var(--muted); font-size: 12px; }
+.site .dot { width: 22px; height: 22px; border-radius: 50%; background: var(--adobe-soft); display: grid; place-items: center; }
+.site .dot svg { width: 11px; height: 11px; fill: var(--adobe); }
+.site:hover { border-color: var(--adobe); }
+
+.types { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.type { border-inline-start: 0; padding: 14px 16px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); display: grid; gap: 4px; }
+.type b { font-size: 15px; }
+.type span { color: var(--muted); font-size: 14px; }
+.sev { font-size: 12px; font-weight: 700; color: var(--alert); }
+.sev.mid { color: var(--adobe); }
+
+.send { background: var(--palm); color: var(--surface); border-radius: 18px; padding: 24px; display: grid; gap: 14px; }
+.send h2 { color: var(--surface); }
+.send ol { margin: 0; padding-inline-start: 22px; display: grid; gap: 6px; }
+.send p { opacity: .9; max-width: 70ch; }
+
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--adobe); outline-offset: 2px; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  background: var(--ink); color: var(--surface); padding: 8px 16px; border-radius: 999px; font-size: 14px; }
+@media (max-width: 480px) { .grid { grid-template-columns: 1fr; } .meter { width: 90px; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">قسم التراث العمراني · منطقة القصيم</span>
+    <h1>رصد تراث القصيم العمراني</h1>
+    <div class="tooth" aria-hidden="true"></div>
+    <p class="lede">بحوث جاهزة على منصة X وفي الأخبار لالتقاط ما يُنشر عن هدم أو ترميم مخالف أو تعدٍّ أو إهمال في مباني الطين والبلدات القديمة. اختر المدة، افتح كل بحث، وعلّم عليه بعد مراجعته.</p>
+  </header>
+
+  <div class="controls">
+    <div class="seg" role="group" aria-label="مدة البحث">
+      <button type="button" data-days="1" id="r1">آخر 24 ساعة</button>
+      <button type="button" data-days="3" id="r3">آخر 3 أيام</button>
+      <button type="button" data-days="7" id="r7">آخر أسبوع</button>
+      <button type="button" data-days="30" id="r30">آخر شهر</button>
+    </div>
+    <div class="progress">
+      <span id="pText">0 من 0 بحوث روجعت اليوم</span>
+      <span class="meter"><i id="pBar"></i></span>
+      <button type="button" class="linkbtn" id="reset">بدء جولة جديدة</button>
+    </div>
+  </div>
+
+  <section>
+    <div class="sec-head">
+      <h2>بحوث المنطقة حسب نوع المخالفة</h2>
+      <p>كل بحث يجمع مدن القصيم مع كلمات المخالفة، ويفتح مباشرة على تبويب «الأحدث» في X. افتحه من الزر وليس بلصقه في صفحة الترند. إذا ظهرت «لا توجد نتائج» فمعناها أنه لا منشورات مطابقة في المدة المختارة؛ جرّب «آخر شهر» أو البحث التجريبي للتأكد أن الروابط تعمل.</p>
+    </div>
+    <div class="grid" id="xGrid"></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>المواقع المسماة</h2>
+      <p>اضغط على أي موقع لرؤية كل ما نُشر عنه في المدة المختارة. أي منشور يذكر أعمالاً أو معدات أو تغييراً في الواجهة يستحق التدقيق.</p>
+    </div>
+    <div class="sites" id="sites"></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>الأخبار والمواقع الإلكترونية</h2>
+      <p>بحث جوجل مقيّد بالمدة نفسها، لالتقاط ما تنشره الصحف المحلية وحسابات الأخبار.</p>
+    </div>
+    <div class="grid" id="gGrid"></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>ما الذي يُعد مخالفة محتملة؟</h2>
+      <p>مرجع سريع أثناء المراجعة. الحكم النهائي للمختص بعد التحقق الميداني وفق نظام الآثار والمتاحف والتراث العمراني ولوائحه.</p>
+    </div>
+    <div class="types">
+      <div class="type"><span class="sev">عالية</span><b>هدم كلي أو جزئي</b><span>معدات ثقيلة، أنقاض طينية، اختفاء جدار أو برج، إعلان «أرض للبيع» مكان مبنى قديم.</span></div>
+      <div class="type"><span class="sev">عالية</span><b>ترميم بمواد غير متوافقة</b><span>بلك أو خرسانة أو لياسة إسمنتية أو دهانات حديثة على جدران الطين واللبن.</span></div>
+      <div class="type"><span class="sev mid">متوسطة</span><b>إضافات وتعديات</b><span>غرف أو أسوار حديثة ملاصقة، فتح أبواب ونوافذ جديدة، تمديدات ولوحات على الواجهات.</span></div>
+      <div class="type"><span class="sev mid">متوسطة</span><b>عبث وتشويه</b><span>كتابات وشعارات، حرائق، رمي مخلفات، نزع أبواب خشبية أو زخارف أو أحجار.</span></div>
+      <div class="type"><span class="sev mid">متوسطة</span><b>إهمال يهدد السلامة</b><span>تصدعات، ميلان، سقوط أسقف بعد الأمطار، تجمع مياه عند الأساسات.</span></div>
+      <div class="type"><span class="sev mid">متوسطة</span><b>استخدام غير ملائم</b><span>تخزين أو حظائر داخل المبنى، مواقف سيارات أو بسطات على الحرم المحيط.</span></div>
+    </div>
+  </section>
+
+  <section class="send">
+    <h2>وجدت منشوراً مشبوهاً؟</h2>
+    <ol>
+      <li>انسخ رابط المنشور وخذ لقطة شاشة له قبل أن يُحذف.</li>
+      <li>أرفقهما في محضر الرصد مع اسم الموقع إن كان معروفاً.</li>
+      <li>حدّد نوع المخالفة المحتملة ودرجة أهميتها من القائمة أعلاه، ثم أحِل الحالة للتحقق الميداني.</li>
+    </ol>
+    <p>يُنصح بجولة يومية على البحوث ذات الأولوية، وجولة أسبوعية على كل البحوث والمواقع.</p>
+  </section>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(() => {
+  const R = '(القصيم OR بريدة OR عنيزة OR الرس OR البكيرية OR المذنب)';
+  const X_SEARCHES = [
+    { id: 'demo', title: 'هدم وإزالة', hot: true,
+      q: '(هدم OR إزالة OR شيول) ("بيت طين" OR "بيوت الطين" OR تراثي) ' + R },
+    { id: 'reno', title: 'ترميم بمواد حديثة', hot: true,
+      q: '(ترميم OR بلك OR إسمنت) ("بيت طين" OR "بيوت الطين" OR تراثي) ' + R },
+    { id: 'coll', title: 'انهيار وإهمال', hot: false,
+      q: '(انهيار OR سقوط OR تصدع) ("بيت طين" OR "بيوت الطين" OR تراثي) ' + R },
+    { id: 'vand', title: 'عبث وتشويه وحرائق', hot: false,
+      q: '(كتابات OR تخريب OR حريق) ("بيت طين" OR "بيوت الطين" OR تراثي) ' + R },
+    { id: 'rep', title: 'بلاغات وشكاوى', hot: false,
+      q: '(مخالفة OR بلاغ OR تعديات) (تراث OR تراثي OR "بيت طين") ' + R },
+    { id: 'media', title: 'صور ومقاطع من البلدات القديمة', hot: false,
+      q: '("بيت طين" OR "بيوت الطين" OR "البلدة القديمة") ' + R + ' filter:media' },
+    { id: 'test', title: 'بحث تجريبي بسيط', hot: false,
+      q: '"بيوت الطين" القصيم' }
+  ];
+  const SITES = [
+    ['سوق المسوكف', 'عنيزة'], ['بيت البسام', 'عنيزة'], ['عنيزة القديمة', 'عنيزة'],
+    ['بريدة القديمة', 'بريدة'], ['قصر الدبيخي', 'بريدة'],
+    ['مرقب الرس', 'الرس'], ['برج الشنانة', 'الرس'],
+    ['بلدة الخبراء', 'رياض الخبراء'], ['الخبراء التراثية', 'رياض الخبراء'],
+    ['قصر مارد', 'الأسياح'], ['قصر قبة', 'الأسياح'],
+    ['قصر المشقوق', 'قصيباء'], ['قصر ابن حجاج', 'القوارة'],
+    ['دار الحسياني', 'المذنب'], ['المذنب القديمة', 'المذنب'],
+    ['البكيرية القديمة', 'البكيرية'], ['عيون الجواء القديمة', 'عيون الجواء']
+  ];
+  const G_SEARCHES = [
+    { id: 'g1', title: 'هدم مبانٍ تراثية في القصيم', q: '(هدم OR إزالة) ("بيوت الطين" OR "مبنى تراثي" OR "البلدة القديمة") القصيم' },
+    { id: 'g2', title: 'مخالفات ترصدها هيئة التراث', q: '"هيئة التراث" مخالفة القصيم' },
+    { id: 'g3', title: 'انهيار بيوت طين بعد الأمطار', q: '(انهيار OR سقوط) "بيوت الطين" (القصيم OR بريدة OR عنيزة OR الرس)' }
+  ];
+
+  const ICON_X = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.7 8 10.3h-6.3l-4.9-6.4L5.3 21H2.2l7.2-8.3L1.8 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5z"/></svg>';
+  const ICON_G = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 3a7.5 7.5 0 0 1 6 12l4.2 4.2-1.4 1.4-4.2-4.2A7.5 7.5 0 1 1 10.5 3zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11z"/></svg>';
+  const ICON_C = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h11v13h-2V5H8zM5 7h10v14H5zm2 2v10h6V9z"/></svg>';
+  const ICON_PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7zm0 4.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/></svg>';
+
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  };
+  const today = new Date().toISOString().slice(0, 10);
+  let days = store.get('qm-days2', 7);
+  let done = store.get('qm-done', {});
+  if (done.date !== today) done = { date: today, ids: [] };
+
+  const sinceDate = () => { const d = new Date(Date.now() - days * 86400000); return d.toISOString().slice(0, 10); };
+  const xUrl = q => 'https://x.com/search?q=' + encodeURIComponent(q + ' since:' + sinceDate()) + '&f=live';
+  const gTbs = () => ({ 1: 'qdr:d', 3: 'qdr:d3', 7: 'qdr:w', 30: 'qdr:m' }[days]);
+  const gUrl = q => 'https://www.google.com/search?q=' + encodeURIComponent(q) + '&tbs=' + gTbs();
+
+  function card(s, kind) {
+    const el = document.createElement('article');
+    el.className = 'card';
+    el.dataset.id = s.id;
+    el.innerHTML =
+      '<div class="card-top"><h3></h3>' + (s.hot ? '<span class="tag hot">أولوية</span>' : (kind === 'g' ? '<span class="tag">أخبار</span>' : '')) + '</div>' +
+      '<div class="q"></div>' +
+      '<div class="actions">' +
+        '<a class="btn primary open" target="_blank" rel="noopener">' + (kind === 'x' ? ICON_X + 'افتح في X' : ICON_G + 'افتح في جوجل') + '</a>' +
+        '<button type="button" class="btn copy">' + ICON_C + 'نسخ البحث</button>' +
+        '<label class="tick"><input type="checkbox" id="chk-' + s.id + '"> روجع</label>' +
+      '</div>';
+    el.querySelector('h3').textContent = s.title;
+    el.querySelector('.q').textContent = s.q;
+    el.querySelector('.copy').onclick = () => copy(kind === 'x' ? s.q + ' since:' + sinceDate() : s.q);
+    const cb = el.querySelector('input');
+    cb.onchange = () => toggle(s.id, cb.checked);
+    el.querySelector('.open').addEventListener('click', () => { if (!cb.checked) { cb.checked = true; toggle(s.id, true); } });
+    return el;
+  }
+
+  const xGrid = document.getElementById('xGrid'), gGrid = document.getElementById('gGrid'), sites = document.getElementById('sites');
+  X_SEARCHES.forEach(s => xGrid.appendChild(card(s, 'x')));
+  G_SEARCHES.forEach(s => gGrid.appendChild(card(s, 'g')));
+  SITES.forEach(([name, place]) => {
+    const a = document.createElement('a');
+    a.className = 'site'; a.target = '_blank'; a.rel = 'noopener';
+    a.dataset.q = '"' + name + '"';
+    a.innerHTML = '<span class="dot">' + ICON_PIN + '</span><span></span><small></small>';
+    a.children[1].textContent = name; a.children[2].textContent = place;
+    sites.appendChild(a);
+  });
+
+  const allIds = [...X_SEARCHES, ...G_SEARCHES].map(s => s.id);
+  function refresh() {
+    document.querySelectorAll('#xGrid .card').forEach(c => { c.querySelector('.open').href = xUrl(X_SEARCHES.find(s => s.id === c.dataset.id).q); });
+    document.querySelectorAll('#gGrid .card').forEach(c => { c.querySelector('.open').href = gUrl(G_SEARCHES.find(s => s.id === c.dataset.id).q); });
+    document.querySelectorAll('.site').forEach(a => { a.href = xUrl(a.dataset.q); });
+    document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.days === days)));
+    document.querySelectorAll('.card').forEach(c => {
+      const on = done.ids.includes(c.dataset.id);
+      c.classList.toggle('done', on); c.querySelector('input').checked = on;
+    });
+    const n = done.ids.filter(id => allIds.includes(id)).length;
+    document.getElementById('pText').textContent = n + ' من ' + allIds.length + ' بحوث روجعت اليوم';
+    document.getElementById('pBar').style.width = (n / allIds.length * 100) + '%';
+  }
+  function toggle(id, on) {
+    done.ids = done.ids.filter(x => x !== id); if (on) done.ids.push(id);
+    store.set('qm-done', done); refresh();
+  }
+  document.querySelectorAll('.seg button').forEach(b => b.onclick = () => { days = +b.dataset.days; store.set('qm-days2', days); refresh(); });
+  document.getElementById('reset').onclick = () => { done = { date: today, ids: [] }; store.set('qm-done', done); refresh(); };
+
+  const toast = document.getElementById('toast'); let tt;
+  function say(m) { toast.textContent = m; toast.hidden = false; clearTimeout(tt); tt = setTimeout(() => toast.hidden = true, 1800); }
+  function copy(t) {
+    const ok = () => say('نُسخ البحث');
+    try { navigator.clipboard.writeText(t).then(ok, () => fallback(t)); } catch (e) { fallback(t); }
+  }
+  function fallback(t) {
+    const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); say('نُسخ البحث'); } catch (e) { say('حدّد النص وانسخه يدوياً'); }
+    ta.remove();
+  }
+  refresh();
+})();
+</script>
+
+</body>
+</html>
