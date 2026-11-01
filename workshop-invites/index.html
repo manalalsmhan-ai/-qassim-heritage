@@ -4,109 +4,162 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>متابعة دعوات ورشة التراث العمراني</title>
+<title>دعوات ورشة ملاك التراث</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
 <style>
 :root{
   --bg:#f6f0e6; --surface:#fffaf2; --line:#e4d7c3; --ink:#0d3239; --muted:#6b6a5e;
-  --plum:#6d2b51; --plum-soft:#f1e3ea; --ok:#2f7a4f; --ok-soft:#e2f0e6;
-  --font:"IBM Plex Sans Arabic","Segoe UI",Tahoma,"Geeza Pro",sans-serif;
-  color-scheme:light;
+  --plum:#6d2b51; --plum-soft:#f1e3ea; --ok:#2f7a4f; --ok-soft:#e2f0e6; --warn:#a2621a; --warn-soft:#f7ead6;
+  --font:"IBM Plex Sans Arabic","Segoe UI",Tahoma,"Geeza Pro",sans-serif; color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root{
   --bg:#14191a; --surface:#1c2324; --line:#2f3a3b; --ink:#ece4d6; --muted:#a3a092;
-  --plum:#d79bbd; --plum-soft:#3a2632; --ok:#7cc79a; --ok-soft:#1f3328; color-scheme:dark}}
+  --plum:#d79bbd; --plum-soft:#3a2632; --ok:#7cc79a; --ok-soft:#1f3328; --warn:#e2b06d; --warn-soft:#3a2d1a; color-scheme:dark}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.6;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  padding-top:calc(24px + env(safe-area-inset-top,0px));padding-bottom:calc(48px + env(safe-area-inset-bottom,0px))}
-.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
-.eyebrow{color:var(--muted);font-size:.85rem;letter-spacing:.02em;margin:0}
-h1{font-size:1.65rem;line-height:1.3;margin:4px 0 0;color:var(--plum);text-wrap:balance}
-.facts{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--muted);margin-top:6px}
-.tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media (max-width:520px){.tiles{grid-template-columns:1fr}}
-.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px}
-.tile .label{font-weight:600}
-.tile .big{font-size:2.6rem;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
-.tile .big small{font-size:1rem;color:var(--muted);font-weight:500}
-.tile.sent .big{color:var(--ok)} .tile.conf .big{color:var(--plum)}
-.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
-.bar i{display:block;height:100%;width:0;border-radius:99px;transition:width .4s}
-.sent .bar i{background:var(--ok)} .conf .bar i{background:var(--plum)}
-.pct{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
-section h2{font-size:1.05rem;margin:0 0 10px}
-.names{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.names li{display:flex;gap:12px;align-items:baseline;padding:10px 16px;border-top:1px solid var(--line)}
-.names li:first-child{border-top:0}
-.names .n{color:var(--muted);font-variant-numeric:tabular-nums;font-size:.85rem;min-width:1.6em}
-.empty{padding:18px;color:var(--muted);text-align:center}
-.updated{font-size:.85rem;color:var(--muted)}
-@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+  padding-top:calc(20px + env(safe-area-inset-top,0px));padding-bottom:calc(48px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1{font-size:1.6rem;margin:0;color:var(--plum);text-wrap:balance;line-height:1.3}
+h2{font-size:1.05rem;margin:0}
+.sub{color:var(--muted);margin:2px 0 0}
+header{display:flex;flex-wrap:wrap;gap:16px;align-items:end;justify-content:space-between}
+.progress{min-width:220px;flex:0 1 300px;display:flex;flex-direction:column;gap:10px}
+.progress .nums{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums;font-weight:600}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+.bar i.p{background:var(--plum)}
+.updated{font-size:.82rem;color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.top{display:grid;grid-template-columns:240px 1fr;gap:24px;align-items:start}
+@media (max-width:720px){.top{grid-template-columns:1fr}}
+.top img{width:100%;border-radius:8px;border:1px solid var(--line);display:block}
+@media (max-width:720px){.top img{max-width:280px;margin-inline:auto}}
+.about{display:flex;flex-direction:column;gap:14px;min-width:0}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.fact{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.fact span{display:block;font-size:.8rem;color:var(--muted)}
+.fact b{font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{border-radius:10px;padding:12px;text-align:center}
+.stat b{display:block;font-size:1.8rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:.85rem}
+.stat.s{background:var(--ok-soft);color:var(--ok)} .stat.c{background:var(--plum-soft);color:var(--plum)} .stat.w{background:var(--warn-soft);color:var(--warn)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.search{flex:1 1 240px;font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex:0 1 440px}
+.seg button{flex:1;border:0;background:transparent;color:var(--ink);font:inherit;font-size:.85rem;padding:7px 6px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--plum);color:var(--surface)}
+.seg button:focus-visible,.search:focus-visible{outline:2px solid var(--plum);outline-offset:2px}
+.list{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+.item{display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:center;padding:12px 16px;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.item.sent{background:var(--ok-soft)}
+.idx{color:var(--muted);font-variant-numeric:tabular-nums;font-size:.85rem;text-align:center}
+.who{min-width:0;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.who b{font-weight:600}
+.chip{font-size:.75rem;border-radius:99px;padding:1px 8px;font-weight:600;background:var(--plum-soft);color:var(--plum)}
+.state{font-size:.82rem;font-weight:600;border-radius:99px;padding:3px 10px;white-space:nowrap}
+.state.todo{background:var(--warn-soft);color:var(--warn)}
+.state.sent{background:var(--surface);color:var(--ok);border:1px solid var(--ok)}
+.state.conf{background:var(--plum);color:var(--surface)}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <main class="wrap">
   <header>
-    <p class="eyebrow">هيئة التراث · متابعة الدعوات</p>
-    <h1>ورشة عمل مبادرة تمكين ملاك أصول التراث العمراني</h1>
-    <div class="facts"><span>الخميس 5 نوفمبر 2026</span><span>9:30 ص – 1:00 م</span><span>فندق موفنبيك، بريدة</span></div>
+    <div>
+      <h1>دعوات ورشة تمكين ملاك أصول التراث العمراني</h1>
+      <p class="sub">هيئة التراث · متابعة الدعوات وتأكيد الحضور</p>
+    </div>
+    <div class="progress" aria-live="polite">
+      <div><div class="nums"><span>تم الإرسال</span><span id="count">– / –</span></div><div class="bar"><i id="bar"></i></div></div>
+      <div><div class="nums"><span>أكدوا الحضور</span><span id="ccount">– / –</span></div><div class="bar"><i class="p" id="cbar"></i></div></div>
+      <span class="updated" id="updated">جاري تحميل الحالة…</span>
+    </div>
   </header>
 
-  <div class="tiles">
-    <div class="tile sent">
-      <span class="label">وصلتهم الدعوة</span>
-      <span class="big"><span id="sent">–</span> <small>من <span class="tot">–</span></small></span>
-      <div class="bar"><i id="sentBar"></i></div>
-      <span class="pct" id="sentPct"></span>
+  <section class="panel top">
+    <img src="invitation.jpg" alt="بطاقة دعوة ورشة عمل مبادرة تمكين ملاك أصول التراث العمراني">
+    <div class="about">
+      <h2>عن الورشة</h2>
+      <div class="facts">
+        <div class="fact"><span>التاريخ</span><b>الخميس 5 نوفمبر 2026</b></div>
+        <div class="fact"><span>الوقت</span><b>9:30 ص – 1:00 م</b></div>
+        <div class="fact"><span>المكان</span><b>فندق موفنبيك، بريدة</b></div>
+      </div>
+      <p style="margin:0">ورشة عمل تهدف إلى تعزيز دور ملاك أصول التراث العمراني في الحفاظ عليه، ويُكرَّم فيها الملاك المدعوون.</p>
+      <div class="stats">
+        <div class="stat s"><b id="nSent">–</b><span>وصلتهم الدعوة</span></div>
+        <div class="stat c"><b id="nConf">–</b><span>أكدوا الحضور</span></div>
+        <div class="stat w"><b id="nTodo">–</b><span>بانتظار الإرسال</span></div>
+      </div>
     </div>
-    <div class="tile conf">
-      <span class="label">أكدوا الحضور</span>
-      <span class="big"><span id="conf">–</span> <small>من <span class="tot">–</span></small></span>
-      <div class="bar"><i id="confBar"></i></div>
-      <span class="pct" id="confPct"></span>
+  </section>
+
+  <div class="tools">
+    <input class="search" id="q" type="search" placeholder="ابحث بالاسم" aria-label="بحث بالاسم">
+    <div class="seg" role="group" aria-label="تصفية">
+      <button data-f="all" aria-pressed="true">الكل</button>
+      <button data-f="todo" aria-pressed="false">لم تُرسل</button>
+      <button data-f="done" aria-pressed="false">أُرسلت</button>
+      <button data-f="conf" aria-pressed="false">أكدوا الحضور</button>
     </div>
   </div>
 
-  <section>
-    <h2>أكدوا حضورهم</h2>
-    <ul class="names" id="names"><li class="empty">جاري التحميل…</li></ul>
-  </section>
-
-  <p class="updated" id="updated">الأرقام تتحدث كل ساعة.</p>
+  <div class="list" id="list"></div>
 </main>
 <script>
+const NAMES = [{"id": "r2", "name": "علي سليمان علي الدبيخي", "kind": "m"}, {"id": "r3", "name": "عبدالله سليمان علي القفاري", "kind": "m"}, {"id": "r4", "name": "فهد علي عبدالله العيدان", "kind": "m"}, {"id": "r5", "name": "خالد صالح عبدالله العمير", "kind": "m"}, {"id": "r6", "name": "عساف عبدالله صالح العساف", "kind": "m"}, {"id": "r7", "name": "فيصل محمد عبدالله الزمام", "kind": "m"}, {"id": "r8", "name": "إبراهيم صالح حمد الحمدان", "kind": "m"}, {"id": "r9", "name": "صخر محمد عبدالرحمن القدهي", "kind": "m"}, {"id": "r10", "name": "وليد محمد عبدالرحمن البادي", "kind": "m"}, {"id": "r11", "name": "خالد محمد علي الجدعي", "kind": "m"}, {"id": "r12", "name": "محمد ناصر محمد الراشد", "kind": "m"}, {"id": "r13", "name": "خالد ضيف الله عطالله المطرفي", "kind": "m"}, {"id": "r14", "name": "فهد عبدالعزيز الفهيد", "kind": "m"}, {"id": "r15", "name": "علي حمد الفهيد", "kind": "m"}, {"id": "r16", "name": "فهد صالح الفهيد", "kind": "m"}, {"id": "r17", "name": "عبدالرحمن حوشان التويجري", "kind": "m"}, {"id": "r18", "name": "أحمد عبدالرحمن المقبل", "kind": "m"}, {"id": "r19", "name": "ماجد محمد الشايع", "kind": "m"}, {"id": "r20", "name": "إبراهيم عبدالله البطي", "kind": "m"}, {"id": "r21", "name": "عبدالعزيز محمد السويلم", "kind": "m"}, {"id": "r22", "name": "أوقاف عائلة الراجحي", "kind": "entity"}, {"id": "r23", "name": "صالح محمد الحديثي", "kind": "m"}, {"id": "r24", "name": "محمد عبدالله الدخيل", "kind": "m"}, {"id": "r25", "name": "هيثم صالح اليوسف", "kind": "m"}, {"id": "r26", "name": "ماضي حمد الربيعان", "kind": "m"}, {"id": "r27", "name": "علي عقلاء العقلاء", "kind": "m"}, {"id": "r28", "name": "صالح فريح العنزي", "kind": "m"}, {"id": "r29", "name": "عثمان عبدالعزيز العمير", "kind": "m"}, {"id": "r30", "name": "إبراهيم سليمان المطرودي", "kind": "m"}, {"id": "r31", "name": "منصور عبدالله السعيد", "kind": "m"}, {"id": "r32", "name": "عبدالعزيز عثمان السعيد", "kind": "m"}, {"id": "r33", "name": "صالح إبراهيم السعيّد", "kind": "m"}, {"id": "r34", "name": "نزار حمد الحركان", "kind": "m"}, {"id": "r35", "name": "يوسف علي الزنيدي", "kind": "m"}, {"id": "r36", "name": "علي سليمان الصالحي", "kind": "m"}, {"id": "r37", "name": "إبراهيم صالح العويس", "kind": "m"}, {"id": "r38", "name": "مؤسسة أهالي البكيرية الوقفية", "kind": "entity"}, {"id": "r39", "name": "سهيل سليمان الجناحي", "kind": "m"}, {"id": "r40", "name": "عبدالرحمن إبراهيم السلوم", "kind": "m"}, {"id": "r41", "name": "عبدالعزيز براك الخضير", "kind": "m"}, {"id": "r42", "name": "فهد حمد المعتاز", "kind": "m"}, {"id": "r43", "name": "ضياء عبدالله المحيميد", "kind": "m"}, {"id": "r44", "name": "وقف علي محمد الحواس", "kind": "entity"}, {"id": "r45", "name": "توفيق عبدالله الزامل", "kind": "m"}, {"id": "r47", "name": "صالح محمد المزروع", "kind": "m"}, {"id": "r48", "name": "أوقاف الشيخ محمد إبراهيم الخضير", "kind": "entity"}, {"id": "r49", "name": "خالد سليمان الدواس", "kind": "m"}, {"id": "r50", "name": "محمد عبدالرحمن الشائع", "kind": "m"}, {"id": "r51", "name": "سلطان حسن السلطان", "kind": "m"}, {"id": "r52", "name": "محمد ناصر السمران", "kind": "m"}, {"id": "r53", "name": "محمد سليمان العقيلي", "kind": "m"}, {"id": "r54", "name": "إبراهيم سليمان الحايك", "kind": "m"}, {"id": "r55", "name": "عبدالعزيز راضي الراضي", "kind": "m"}, {"id": "r56", "name": "خالد علي العليقي", "kind": "m"}, {"id": "r57", "name": "عبداللطيف صالح الوهيبي", "kind": "m"}, {"id": "r58", "name": "هزاع عايش ابالروس", "kind": "m"}, {"id": "r59", "name": "جمعية عراقة التراث", "kind": "entity"}, {"id": "r60", "name": "إبراهيم عبدالله عبدالله الحزيمي", "kind": "m"}, {"id": "r61", "name": "مساعد سعود نحيت الحربي", "kind": "m"}, {"id": "r62", "name": "صنت صنهات محمد الحربي", "kind": "m"}, {"id": "r63", "name": "ريان خالد صالح الحربي", "kind": "m"}, {"id": "r64", "name": "محمد سليمان الحربي", "kind": "m"}, {"id": "r65", "name": "عبدالله محمد النخيلان", "kind": "m"}, {"id": "r66", "name": "فهد علي الطريس", "kind": "m"}, {"id": "r67", "name": "محمد راحج المطيري", "kind": "m"}, {"id": "r68", "name": "يوسف عبدالله العمرو", "kind": "m"}, {"id": "r70", "name": "خليف ضيف الله العتيبي", "kind": "m"}, {"id": "r71", "name": "فجر صالح السويان", "kind": "f"}, {"id": "r72", "name": "مجدي فاهد المطيري", "kind": "m"}, {"id": "r73", "name": "عايد محمد المظيبري", "kind": "m"}, {"id": "r74", "name": "احمد راشد الغفيلي", "kind": "m"}, {"id": "r75", "name": "هدى صالح الحربي", "kind": "f"}, {"id": "r76", "name": "حمدان مساعد المظيبري", "kind": "m"}, {"id": "r77", "name": "محمد حماد اللزام", "kind": "m"}, {"id": "r78", "name": "وفاء محمد العقيلي", "kind": "f"}, {"id": "r79", "name": "خشمان ذعار الحربي", "kind": "m"}, {"id": "r80", "name": "احمد محمد المطيري", "kind": "m"}, {"id": "r81", "name": "فهد عبدالرحمن السرداح", "kind": "m"}, {"id": "r82", "name": "عوض عايض الغيداني", "kind": "m"}, {"id": "r83", "name": "محمد سعود الحربي", "kind": "m"}, {"id": "r84", "name": "صالح سليمان أبا الخيل", "kind": "m"}, {"id": "r85", "name": "علي حمد العباد", "kind": "m"}];
+let st = {}, filter = 'all';
 const $ = id => document.getElementById(id);
+const isConf = p => !!(st[p.id]||{}).confirmed;
+const isSent = p => isConf(p) || !!(st[p.id]||{}).sent;
 function fmtTime(iso){
   try { return new Intl.DateTimeFormat('ar-SA-u-nu-latn-ca-gregory',{timeZone:'Asia/Riyadh',weekday:'long',day:'numeric',month:'long',hour:'numeric',minute:'2-digit'}).format(new Date(iso)); }
   catch(e){ return iso; }
+}
+function render(){
+  const q = $('q').value.trim(), list = $('list'); list.innerHTML = '';
+  const rows = NAMES.filter(p => {
+    if (filter==='todo' && isSent(p)) return false;
+    if (filter==='done' && !isSent(p)) return false;
+    if (filter==='conf' && !isConf(p)) return false;
+    return !q || p.name.includes(q);
+  });
+  rows.forEach(p => {
+    const el = document.createElement('div');
+    el.className = 'item' + (isSent(p) ? ' sent' : '');
+    const chip = p.kind==='entity' ? '<span class="chip">جهة</span>' : '';
+    const state = isConf(p) ? '<span class="state conf">أكد الحضور</span>' : isSent(p) ? '<span class="state sent">وصلته الدعوة</span>' : '<span class="state todo">لم تُرسل</span>';
+    el.innerHTML = `<span class="idx">${NAMES.indexOf(p)+1}</span><div class="who"><b></b>${chip}</div>${state}`;
+    el.querySelector('b').textContent = p.name;
+    list.appendChild(el);
+  });
+  if (!rows.length) list.innerHTML = '<div class="empty">ما فيه أسماء تطابق البحث أو التصفية.</div>';
+  const t = NAMES.length, n = NAMES.filter(isSent).length, c = NAMES.filter(isConf).length;
+  $('count').textContent = `${n} / ${t}`; $('bar').style.width = (100*n/t)+'%';
+  $('ccount').textContent = `${c} / ${t}`; $('cbar').style.width = (100*c/t)+'%';
+  $('nSent').textContent = n; $('nConf').textContent = c; $('nTodo').textContent = t - n;
 }
 async function load(){
   try{
     const r = await fetch('data.json?t=' + Date.now(), {cache:'no-store'});
     const d = await r.json();
-    const t = d.total || 0;
-    document.querySelectorAll('.tot').forEach(e => e.textContent = t);
-    $('sent').textContent = d.sent; $('conf').textContent = d.confirmed;
-    const sp = t ? Math.round(100*d.sent/t) : 0, cp = t ? Math.round(100*d.confirmed/t) : 0;
-    $('sentBar').style.width = sp + '%'; $('confBar').style.width = cp + '%';
-    $('sentPct').textContent = sp + '٪ من المدعوين';
-    $('confPct').textContent = cp + '٪ من المدعوين' + (d.sent ? ` · ${Math.round(100*d.confirmed/d.sent)}٪ من اللي وصلتهم` : '');
-    const ul = $('names'); ul.innerHTML = '';
-    if (!d.confirmed_names || !d.confirmed_names.length){
-      ul.innerHTML = '<li class="empty">ما أحد أكد حضوره للحين.</li>';
-    } else {
-      d.confirmed_names.forEach((n,i) => { const li=document.createElement('li');
-        li.innerHTML = `<span class="n">${i+1}</span><span></span>`; li.lastChild.textContent = n; ul.appendChild(li); });
-    }
-    $('updated').textContent = 'آخر تحديث: ' + fmtTime(d.updated_at) + ' · الأرقام تتحدث كل ساعة.';
-  }catch(e){
-    $('updated').textContent = 'ما قدرت أحمّل الأرقام. حدّث الصفحة بعد شوي.';
-  }
+    st = d.statuses || {};
+    $('updated').textContent = 'آخر تحديث: ' + fmtTime(d.updated_at) + ' · يتحدث كل ساعة';
+  }catch(e){ $('updated').textContent = 'ما قدرت أحمّل الحالة. حدّث الصفحة بعد شوي.'; }
+  render();
 }
-load(); setInterval(load, 5*60*1000);
+$('q').addEventListener('input', render);
+document.querySelectorAll('[data-f]').forEach(b => b.addEventListener('click', () => {
+  filter = b.dataset.f; document.querySelectorAll('[data-f]').forEach(x => x.setAttribute('aria-pressed', x===b)); render();
+}));
+render(); load(); setInterval(load, 5*60*1000);
 </script>
 </body>
 </html>
