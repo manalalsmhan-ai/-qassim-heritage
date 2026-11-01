@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>متابعة دعوات ورشة التراث العمراني</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#f6f0e6; --surface:#fffaf2; --line:#e4d7c3; --ink:#0d3239; --muted:#6b6a5e;
+  --plum:#6d2b51; --plum-soft:#f1e3ea; --ok:#2f7a4f; --ok-soft:#e2f0e6;
+  --font:"IBM Plex Sans Arabic","Segoe UI",Tahoma,"Geeza Pro",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#14191a; --surface:#1c2324; --line:#2f3a3b; --ink:#ece4d6; --muted:#a3a092;
+  --plum:#d79bbd; --plum-soft:#3a2632; --ok:#7cc79a; --ok-soft:#1f3328; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-top:calc(24px + env(safe-area-inset-top,0px));padding-bottom:calc(48px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.eyebrow{color:var(--muted);font-size:.85rem;letter-spacing:.02em;margin:0}
+h1{font-size:1.65rem;line-height:1.3;margin:4px 0 0;color:var(--plum);text-wrap:balance}
+.facts{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--muted);margin-top:6px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:520px){.tiles{grid-template-columns:1fr}}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px}
+.tile .label{font-weight:600}
+.tile .big{font-size:2.6rem;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.tile .big small{font-size:1rem;color:var(--muted);font-weight:500}
+.tile.sent .big{color:var(--ok)} .tile.conf .big{color:var(--plum)}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;transition:width .4s}
+.sent .bar i{background:var(--ok)} .conf .bar i{background:var(--plum)}
+.pct{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+section h2{font-size:1.05rem;margin:0 0 10px}
+.names{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.names li{display:flex;gap:12px;align-items:baseline;padding:10px 16px;border-top:1px solid var(--line)}
+.names li:first-child{border-top:0}
+.names .n{color:var(--muted);font-variant-numeric:tabular-nums;font-size:.85rem;min-width:1.6em}
+.empty{padding:18px;color:var(--muted);text-align:center}
+.updated{font-size:.85rem;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <p class="eyebrow">هيئة التراث · متابعة الدعوات</p>
+    <h1>ورشة عمل مبادرة تمكين ملاك أصول التراث العمراني</h1>
+    <div class="facts"><span>الخميس 5 نوفمبر 2026</span><span>9:30 ص – 1:00 م</span><span>فندق موفنبيك، بريدة</span></div>
+  </header>
+
+  <div class="tiles">
+    <div class="tile sent">
+      <span class="label">وصلتهم الدعوة</span>
+      <span class="big"><span id="sent">–</span> <small>من <span class="tot">–</span></small></span>
+      <div class="bar"><i id="sentBar"></i></div>
+      <span class="pct" id="sentPct"></span>
+    </div>
+    <div class="tile conf">
+      <span class="label">أكدوا الحضور</span>
+      <span class="big"><span id="conf">–</span> <small>من <span class="tot">–</span></small></span>
+      <div class="bar"><i id="confBar"></i></div>
+      <span class="pct" id="confPct"></span>
+    </div>
+  </div>
+
+  <section>
+    <h2>أكدوا حضورهم</h2>
+    <ul class="names" id="names"><li class="empty">جاري التحميل…</li></ul>
+  </section>
+
+  <p class="updated" id="updated">الأرقام تتحدث كل ساعة.</p>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+function fmtTime(iso){
+  try { return new Intl.DateTimeFormat('ar-SA-u-nu-latn-ca-gregory',{timeZone:'Asia/Riyadh',weekday:'long',day:'numeric',month:'long',hour:'numeric',minute:'2-digit'}).format(new Date(iso)); }
+  catch(e){ return iso; }
+}
+async function load(){
+  try{
+    const r = await fetch('data.json?t=' + Date.now(), {cache:'no-store'});
+    const d = await r.json();
+    const t = d.total || 0;
+    document.querySelectorAll('.tot').forEach(e => e.textContent = t);
+    $('sent').textContent = d.sent; $('conf').textContent = d.confirmed;
+    const sp = t ? Math.round(100*d.sent/t) : 0, cp = t ? Math.round(100*d.confirmed/t) : 0;
+    $('sentBar').style.width = sp + '%'; $('confBar').style.width = cp + '%';
+    $('sentPct').textContent = sp + '٪ من المدعوين';
+    $('confPct').textContent = cp + '٪ من المدعوين' + (d.sent ? ` · ${Math.round(100*d.confirmed/d.sent)}٪ من اللي وصلتهم` : '');
+    const ul = $('names'); ul.innerHTML = '';
+    if (!d.confirmed_names || !d.confirmed_names.length){
+      ul.innerHTML = '<li class="empty">ما أحد أكد حضوره للحين.</li>';
+    } else {
+      d.confirmed_names.forEach((n,i) => { const li=document.createElement('li');
+        li.innerHTML = `<span class="n">${i+1}</span><span></span>`; li.lastChild.textContent = n; ul.appendChild(li); });
+    }
+    $('updated').textContent = 'آخر تحديث: ' + fmtTime(d.updated_at) + ' · الأرقام تتحدث كل ساعة.';
+  }catch(e){
+    $('updated').textContent = 'ما قدرت أحمّل الأرقام. حدّث الصفحة بعد شوي.';
+  }
+}
+load(); setInterval(load, 5*60*1000);
+</script>
+</body>
+</html>
