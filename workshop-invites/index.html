@@ -77,7 +77,6 @@ header{display:flex;flex-wrap:wrap;gap:16px;align-items:end;justify-content:spac
       <p class="sub">هيئة التراث · متابعة الدعوات وتأكيد الحضور</p>
     </div>
     <div class="progress" aria-live="polite">
-      <div><div class="nums"><span>تم الإرسال</span><span id="count">– / –</span></div><div class="bar"><i id="bar"></i></div></div>
       <div><div class="nums"><span>أكدوا الحضور</span><span id="ccount">– / –</span></div><div class="bar"><i class="p" id="cbar"></i></div></div>
       <span class="updated" id="updated">جاري تحميل الحالة…</span>
     </div>
@@ -96,7 +95,7 @@ header{display:flex;flex-wrap:wrap;gap:16px;align-items:end;justify-content:spac
       <div class="stats">
         <div class="stat s"><b id="nSent">–</b><span>وصلتهم الدعوة</span></div>
         <div class="stat c"><b id="nConf">–</b><span>أكدوا الحضور</span></div>
-        <div class="stat w"><b id="nTodo">–</b><span>بانتظار الإرسال</span></div>
+        <div class="stat w"><b id="nTodo">–</b><span>لم يؤكدوا بعد</span></div>
       </div>
     </div>
   </section>
@@ -105,9 +104,8 @@ header{display:flex;flex-wrap:wrap;gap:16px;align-items:end;justify-content:spac
     <input class="search" id="q" type="search" placeholder="ابحث بالاسم" aria-label="بحث بالاسم">
     <div class="seg" role="group" aria-label="تصفية">
       <button data-f="all" aria-pressed="true">الكل</button>
-      <button data-f="todo" aria-pressed="false">لم تُرسل</button>
-      <button data-f="done" aria-pressed="false">أُرسلت</button>
       <button data-f="conf" aria-pressed="false">أكدوا الحضور</button>
+      <button data-f="noconf" aria-pressed="false">لم يؤكدوا بعد</button>
     </div>
   </div>
 
@@ -126,8 +124,8 @@ function fmtTime(iso){
 function render(){
   const q = $('q').value.trim(), list = $('list'); list.innerHTML = '';
   const rows = NAMES.filter(p => {
-    if (filter==='todo' && isSent(p)) return false;
-    if (filter==='done' && !isSent(p)) return false;
+    if (!isSent(p)) return false;
+    if (filter==='noconf' && isConf(p)) return false;
     if (filter==='conf' && !isConf(p)) return false;
     return !q || p.name.includes(q);
   });
@@ -136,15 +134,14 @@ function render(){
     el.className = 'item' + (isSent(p) ? ' sent' : '');
     const chip = p.kind==='entity' ? '<span class="chip">جهة</span>' : '';
     const state = isConf(p) ? '<span class="state conf">أكد الحضور</span>' : isSent(p) ? '<span class="state sent">وصلته الدعوة</span>' : '<span class="state todo">لم تُرسل</span>';
-    el.innerHTML = `<span class="idx">${NAMES.indexOf(p)+1}</span><div class="who"><b></b>${chip}</div>${state}`;
+    el.innerHTML = `<span class="idx">${NAMES.filter(isSent).indexOf(p)+1}</span><div class="who"><b></b>${chip}</div>${state}`;
     el.querySelector('b').textContent = p.name;
     list.appendChild(el);
   });
   if (!rows.length) list.innerHTML = '<div class="empty">ما فيه أسماء تطابق البحث أو التصفية.</div>';
   const t = NAMES.length, n = NAMES.filter(isSent).length, c = NAMES.filter(isConf).length;
-  $('count').textContent = `${n} / ${t}`; $('bar').style.width = (100*n/t)+'%';
-  $('ccount').textContent = `${c} / ${t}`; $('cbar').style.width = (100*c/t)+'%';
-  $('nSent').textContent = n; $('nConf').textContent = c; $('nTodo').textContent = t - n;
+  $('ccount').textContent = `${c} / ${n}`; $('cbar').style.width = (n ? 100*c/n : 0)+'%';
+  $('nSent').textContent = n; $('nConf').textContent = c; $('nTodo').textContent = n - c;
 }
 async function load(){
   try{
