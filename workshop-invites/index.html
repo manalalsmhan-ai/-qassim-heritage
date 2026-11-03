@@ -42,7 +42,7 @@ header{display:flex;flex-wrap:wrap;gap:16px;align-items:end;justify-content:spac
 .fact{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
 .fact span{display:block;font-size:.8rem;color:var(--muted)}
 .fact b{font-weight:600}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px}
 .stat{border-radius:10px;padding:12px;text-align:center}
 .stat b{display:block;font-size:1.8rem;line-height:1.1;font-variant-numeric:tabular-nums}
 .stat span{font-size:.85rem}
@@ -64,6 +64,7 @@ header{display:flex;flex-wrap:wrap;gap:16px;align-items:end;justify-content:spac
 .state{font-size:.82rem;font-weight:600;border-radius:99px;padding:3px 10px;white-space:nowrap}
 .state.todo{background:var(--warn-soft);color:var(--warn)}
 .state.sent{background:var(--surface);color:var(--ok);border:1px solid var(--ok)}
+.state.dec{background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn)}
 .state.conf{background:var(--plum);color:var(--surface)}
 .empty{padding:28px;text-align:center;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -96,6 +97,7 @@ header{display:flex;flex-wrap:wrap;gap:16px;align-items:end;justify-content:spac
         <div class="stat s"><b id="nSent">–</b><span>وصلتهم الدعوة</span></div>
         <div class="stat c"><b id="nConf">–</b><span>أكدوا الحضور</span></div>
         <div class="stat w"><b id="nTodo">–</b><span>لم يؤكدوا بعد</span></div>
+        <div class="stat w"><b id="nDec">–</b><span>اعتذروا</span></div>
       </div>
     </div>
   </section>
@@ -106,6 +108,7 @@ header{display:flex;flex-wrap:wrap;gap:16px;align-items:end;justify-content:spac
       <button data-f="all" aria-pressed="true">الكل</button>
       <button data-f="conf" aria-pressed="false">أكدوا الحضور</button>
       <button data-f="noconf" aria-pressed="false">لم يؤكدوا بعد</button>
+      <button data-f="dec" aria-pressed="false">اعتذروا</button>
     </div>
   </div>
 
@@ -116,7 +119,8 @@ const NAMES = [{"id": "r2", "name": "علي سليمان علي الدبيخي",
 let st = {}, filter = 'all';
 const $ = id => document.getElementById(id);
 const isConf = p => !!(st[p.id]||{}).confirmed;
-const isSent = p => isConf(p) || !!(st[p.id]||{}).sent;
+const isDec = p => !isConf(p) && !!(st[p.id]||{}).declined;
+const isSent = p => isConf(p) || isDec(p) || !!(st[p.id]||{}).sent;
 function fmtTime(iso){
   try { return new Intl.DateTimeFormat('ar-SA-u-nu-latn-ca-gregory',{timeZone:'Asia/Riyadh',weekday:'long',day:'numeric',month:'long',hour:'numeric',minute:'2-digit'}).format(new Date(iso)); }
   catch(e){ return iso; }
@@ -125,7 +129,8 @@ function render(){
   const q = $('q').value.trim(), list = $('list'); list.innerHTML = '';
   const rows = NAMES.filter(p => {
     if (!isSent(p)) return false;
-    if (filter==='noconf' && isConf(p)) return false;
+    if (filter==='noconf' && (isConf(p) || isDec(p))) return false;
+    if (filter==='dec' && !isDec(p)) return false;
     if (filter==='conf' && !isConf(p)) return false;
     return !q || p.name.includes(q);
   });
@@ -133,7 +138,7 @@ function render(){
     const el = document.createElement('div');
     el.className = 'item' + (isSent(p) ? ' sent' : '');
     const chip = p.kind==='entity' ? '<span class="chip">جهة</span>' : '';
-    const state = isConf(p) ? '<span class="state conf">أكد الحضور</span>' : isSent(p) ? '<span class="state sent">وصلته الدعوة</span>' : '<span class="state todo">لم تُرسل</span>';
+    const state = isConf(p) ? '<span class="state conf">أكد الحضور</span>' : isDec(p) ? '<span class="state dec">اعتذر</span>' : isSent(p) ? '<span class="state sent">وصلته الدعوة</span>' : '<span class="state todo">لم تُرسل</span>';
     el.innerHTML = `<span class="idx">${NAMES.filter(isSent).indexOf(p)+1}</span><div class="who"><b></b>${chip}</div>${state}`;
     el.querySelector('b').textContent = p.name;
     list.appendChild(el);
@@ -141,7 +146,7 @@ function render(){
   if (!rows.length) list.innerHTML = '<div class="empty">ما فيه أسماء تطابق البحث أو التصفية.</div>';
   const t = NAMES.length, n = NAMES.filter(isSent).length, c = NAMES.filter(isConf).length;
   $('ccount').textContent = `${c} / ${n}`; $('cbar').style.width = (n ? 100*c/n : 0)+'%';
-  $('nSent').textContent = n; $('nConf').textContent = c; $('nTodo').textContent = n - c;
+  $('nSent').textContent = n; $('nConf').textContent = c; $('nTodo').textContent = n - c - NAMES.filter(isDec).length; $('nDec').textContent = NAMES.filter(isDec).length;
 }
 async function load(){
   try{
